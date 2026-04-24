@@ -1,65 +1,65 @@
-# Especificacion de Logica de Extraccion de N-gramas de YouTube
+# YouTube N-gram Extraction Logic Specification
 
-Este documento detalla la funcionalidad, reglas de negocio y estructura de datos de la herramienta de extraccion y analisis de frases (n-gramas) de YouTube.
+This document details the functionality, business rules, and data structure of the YouTube phrase (n-gram) extraction and analysis tool.
 
-## Objetivo
-La herramienta permite identificar frases recurrentes (de 2 a 6 palabras) en los videos de creadores de contenido especificos. Utiliza procesamiento en paralelo para la descarga de transcripciones y el analisis estadistico, permitiendo diferenciar entre frases populares (Union) y frases caracteristicas que aparecen en la mayoria de sus videos (Interseccion).
+## Objective
+The tool identifies recurring phrases (from 2 to 6 words) in videos from specific content creators. It uses parallel processing for transcript downloads and statistical analysis, allowing a distinction between popular phrases (Union) and characteristic phrases that appear in most of their videos (Intersection).
 
 ## Inputs
-La herramienta recibe un diccionario de Python donde la Key es la URL del video de YouTube y el Value es el nombre del creador.
-Ejemplo:
+The tool receives a Python dictionary where the Key is the YouTube video URL and the Value is the creator's name.
+Example:
 ```python
 {
-    "https://www.youtube.com/watch?v=vId1": "CREADOR_A",
+    "https://www.youtube.com/watch?v=vId1": "CREATOR_A",
     "https://www.youtube.com/watch?v=vId2": "CREADOR_B"
 }
 ```
 
-## Reglas de Negocio y Funcionalidad
+## Business Rules and Functionality
 
-### Etapa 1: Descarga (Stage 1)
-- Extraccion de ID: Se limpian las URLs para obtener el ID de 11 caracteres.
-- Descarga Paralela: Se utiliza concurrent.futures.ThreadPoolExecutor para descargar multiples transcripciones simultaneamente.
-- Idiomas: Intenta obtener la transcripcion en español (es) y, si no esta disponible, en ingles (en).
-- Persistencia Temporal: Guarda los datos crudos (transcripcion + metadatos) en archivos JSON individuales por video.
+### Stage 1: Download
+- **ID Extraction**: URLs are parsed to extract the 11-character video ID.
+- **Parallel Download**: Uses `concurrent.futures.ThreadPoolExecutor` to download multiple transcripts simultaneously.
+- **Languages**: Attempts to fetch the transcript in Spanish (`es`) first, falling back to English (`en`) if unavailable.
+- **Temporal Persistence**: Saves raw data (transcript + metadata) into individual JSON files per video.
 
-### Etapa 2: Procesamiento (Stage 2)
-- Limpieza de Texto: Convierte a minusculas y elimina signos de puntuacion.
-- Tokenizacion con Timestamps (Manejo Multi-bloque): La herramienta descompone la transcripcion completa en una lista plana de palabras (tokens). Cada token conserva el tiempo de inicio y fin de su bloque original. Esto permite que un n-grama pueda formarse con palabras que pertenecen a diferentes cuadros de texto (objetos de la transcripcion original) de forma fluida.
-- Continuidad Temporal: Al generar un n-grama que cruza bloques, el tiempo de inicio se toma del primer token del n-grama y el tiempo de fin del ultimo token, garantizando precision en la marca de tiempo de la frase completa.
-- Generacion de N-gramas: Genera combinaciones de 2, 3, 4, 5 y 6 palabras consecutivas.
-- Filtro de Stopwords: Un n-grama es descartado solo si todas las palabras que lo componen son stopwords (ej. "de la", "y el"). Si contiene al menos una palabra con valor semantico, se mantiene.
-- Metricas de Analisis:
-    - Union: Representa la frecuencia absoluta de la frase en todo el set de videos.
-    - Interseccion: Frases que aparecen en un porcentaje igual o mayor al INTERSECTION_THRESHOLD (actualmente 60%) del total de videos procesados para ese creador.
-- Modos de Salida:
-    - first_appearance: Solo registra la primera vez que se escucho la frase y el total de repeticiones.
-    - all_appearances: Registra cada una de las veces que se dijo la frase con su URL y marca de tiempo especifica.
+### Stage 2: Processing
+- **Text Cleaning**: Converts text to lowercase and removes punctuation marks.
+- **Tokenization with Timestamps (Multi-block Handling)**: The tool decomposes the full transcript into a flat list of words (tokens). Each token retains the start and end time from its original block. This allows an n-gram to be formed by words belonging to different text blocks (original transcript objects) fluently.
+- **Temporal Continuity**: When generating an n-gram that crosses blocks, the start time is taken from the first token of the n-gram and the end time from the last token, ensuring precision in the phrase's timestamp.
+- **N-gram Generation**: Generates combinations of 2, 3, 4, 5, and 6 consecutive words.
+- **Stopwords Filter**: An n-gram is discarded ONLY if ALL the words composing it are stopwords (e.g., "de la", "y el"). If it contains at least one semantic word, it is kept.
+- **Analysis Metrics**:
+    - **Union**: Represents the absolute frequency of the phrase across the entire video set.
+    - **Intersection**: Phrases that appear in a percentage equal to or greater than the `INTERSECTION_THRESHOLD` (currently 60%) of the total videos processed for that creator.
+- **Output Modes**:
+    - `first_appearance`: Only records the first time the phrase was heard and the total number of repetitions.
+    - `all_appearances`: Records every single time the phrase was spoken, including its URL and specific timestamp.
 
-## Estructura de Archivos (Output)
+## File Structure (Output)
 
-El proyecto genera una jerarquia de carpetas bajo processed_files/:
+The project generates a folder hierarchy under `processed_files/`:
 
 ```text
 processed_files/
-├── processed_transcriptions/          # Transcripciones crudas por creador
+├── processed_transcriptions/          # Raw transcripts by creator
 │   ├── GUSGRI/
 │   │   ├── videoId1.json
 │   │   └── videoId2.json
 │   └── XOCAS/
 │       └── ...
-└── processed_n_gramas/                # Resultados del analisis
-    ├── creators/                      # Resultados individuales
+└── processed_n_gramas/                # Analysis results
+    ├── creators/                      # Individual results
     │   ├── GUSGRI/
-    │   │   ├── all_appearances/       # Detalle de cada aparicion
+    │   │   ├── all_appearances/       # Detail of every appearance
     │   │   │   ├── n_gramas_interception.json
     │   │   │   └── n_gramas_union.json
-    │   │   └── first_appearance/      # Resumen (primera aparicion)
+    │   │   └── first_appearance/      # Summary (first appearance)
     │   │       ├── n_gramas_interception.json
     │   │       └── n_gramas_union.json
     │   └── XOCAS/
     │       └── ...
-    └── global/                        # Agregados de todos los creadores
+    └── global/                        # Aggregated data for all creators
         ├── all_appearances/
         │   ├── n_gramas_interception.json
         │   └── n_gramas_union.json
@@ -68,9 +68,9 @@ processed_files/
             └── n_gramas_union.json
 ```
 
-## Formato de Datos (JSON)
+## Data Format (JSON)
 
-### n_gramas_union.json (Ejemplo first_appearance)
+### n_gramas_union.json (Example: `first_appearance`)
 ```json
 {
   "2_grams": [
@@ -87,7 +87,7 @@ processed_files/
 }
 ```
 
-### n_gramas_union.json (Ejemplo all_appearances)
+### n_gramas_union.json (Example: `all_appearances`)
 ```json
 {
   "2_grams": [
