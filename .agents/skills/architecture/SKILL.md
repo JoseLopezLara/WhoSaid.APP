@@ -1,4 +1,4 @@
-# System Architecture Guide
+# Architecture Skill
 
 This guide explains the technical structure of WhoSaid.APP and how to extend its functionality.
 

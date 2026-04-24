@@ -1,4 +1,4 @@
-# YouTube N-gram Extraction Logic Specification
+# Business Logic Skill
 
 This document details the functionality, business rules, and data structure of the YouTube phrase (n-gram) extraction and analysis tool.
 

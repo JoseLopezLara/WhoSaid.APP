@@ -1,4 +1,4 @@
-# Official Documentation Sources
+# Documentation Skill
 
 Consult these sources before implementing new library-specific logic or troubleshooting library errors.
 
