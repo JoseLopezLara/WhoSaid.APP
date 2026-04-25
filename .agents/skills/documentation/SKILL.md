@@ -11,6 +11,8 @@ Consult these sources before implementing new library-specific logic or troubles
 ## Core Libraries
 - **YouTube Transcript API**: [https://github.com/jdepoix/youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api)
     - Check for: Proxy configuration, language codes, and `fetch()` method parameters.
+- **yt-dlp**: [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
+    - Check for: Audio extraction, cookie management, and format selection.
 - **NLTK (Natural Language Toolkit)**: [https://www.nltk.org/](https://www.nltk.org/)
     - Check for: Stopwords corpus availability and tokenization alternatives.
 - **Concurrent Futures (Python StdLib)**: [https://docs.python.org/3/library/concurrent.futures.html](https://docs.python.org/3/library/concurrent.futures.html)
