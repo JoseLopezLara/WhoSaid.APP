@@ -10,14 +10,15 @@ This document defines the functional scope of WhoSaid.APP from the user's perspe
 
 ## Current Features (V1.0)
 
-### US-01: Bulk Transcript Download
+### US-01: Bulk Transcript Download (via yt-dlp)
 **As a** data researcher,
 **I want to** provide a list of YouTube URLs mapped to creators,
-**So that** I can automatically download and store their transcripts locally.
+**So that** I can automatically download and store their transcripts locally, evading bot detection.
 - **Acceptance Criteria**:
     - Supports Spanish and English.
-    - Uses parallel processing.
-    - Saves JSON files in creator-specific folders.
+    - Uses `yt-dlp` with Client Spoofing and custom User-Agents.
+    - Implements random sleep intervals (3-7s) between requests.
+    - Saves JSON files in creator-specific folders with `text`, `start`, and `duration`.
 
 ### US-02: Multi-word Pattern Extraction (N-grams)
 **As a** linguistic analyst,
@@ -33,6 +34,6 @@ This document defines the functional scope of WhoSaid.APP from the user's perspe
 **So that** I can differentiate catchphrases from common conversational words.
 
 ## Future Features (Backlog)
-- **US-04: Proxy Support**: Use a proxy list to avoid IP blocking from YouTube.
+- **US-04: Proxy Integration (Restoration)**: Re-integrate `ProxyManager` with the modular `yt-dlp` downloader if IP rotation becomes necessary again.
 - **US-05: Sentiment Analysis Integration**: Associate N-grams with emotional tones.
 - **US-06: Cross-Creator Analysis**: Compare if two creators share the same unique N-grams.

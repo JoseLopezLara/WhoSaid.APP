@@ -12,8 +12,10 @@ This guide explains the technical structure of WhoSaid.APP and how to extend its
 The system is divided into independent modules within `src/whosaid/`.
 
 ### Component Map
-- **TranscriptDownloader (`downloader.py`)**: Responsible ONLY for fetching data from YouTube API.
-- **TextProcessor (`processor.py`)**: Responsible ONLY for text cleaning and multi-block tokenization.
+- **TranscriptDownloader (`downloader.py`)**: Orchestrates the download process with retries and delays.
+- **Download Config (`config.py`)**: Centralizes `yt-dlp` options, User-Agents, and client spoofing settings.
+- **YouTube Parser (`parsers.py`)**: Responsible for post-processing; selecting subtitle URLs and parsing JSON3 format.
+- **TextProcessor (`processor.py`)**: Responsible ONLY for text cleaning and multi-block tokenization for analysis.
 - **NgramAnalyzer (`analyzer.py`)**: Orchestrates the processor to generate statistical insights.
 - **StorageManager (`storage.py`)**: Handles the file system hierarchy and JSON persistence.
 

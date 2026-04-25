@@ -23,10 +23,15 @@ Example:
 
 ## Business Rules and Functionality
 
-### Stage 1: Download
+### Stage 1: Download (Evasion-Focused)
 - **ID Extraction**: URLs are parsed to extract the 11-character video ID.
-- **Parallel Download**: Uses `concurrent.futures.ThreadPoolExecutor` to download multiple transcripts simultaneously.
+- **Engine**: Uses `yt-dlp` instead of standard APIs to mimic human browser behavior.
+- **Evasion Techniques**:
+    - **Client Spoofing**: Mimics Android and Web clients to bypass "Proof of Origin" tokens.
+    - **User-Agent Rotation**: Uses modern browser headers.
+    - **Human-like Delays**: Implements random `time.sleep` (3-7s) between requests.
 - **Languages**: Attempts to fetch the transcript in Spanish (`es`) first, falling back to English (`en`) if unavailable.
+- **Format**: Extracts and parses the `json3` YouTube format to maintain compatibility with the downstream pipeline.
 - **Temporal Persistence**: Saves raw data (transcript + metadata) into individual JSON files per video.
 
 ### Stage 2: Processing

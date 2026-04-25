@@ -9,16 +9,15 @@ description:
 Consult these sources before implementing new library-specific logic or troubleshooting library errors.
 
 ## Core Libraries
-- **YouTube Transcript API**: [https://github.com/jdepoix/youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api)
-    - Check for: Proxy configuration, language codes, and `fetch()` method parameters.
 - **yt-dlp**: [https://github.com/yt-dlp/yt-dlp](https://github.com/yt-dlp/yt-dlp)
-    - Check for: Audio extraction, cookie management, and format selection.
+    - **Primary tool** for transcript extraction.
+    - Check for: Audio extraction, client spoofing (`player_client`), and format selection (`json3`).
+- **YouTube Transcript API**: [https://github.com/jdepoix/youtube-transcript-api](https://github.com/jdepoix/youtube-transcript-api)
+    - *Deprecated in this project* due to aggressive IP blocking.
 - **NLTK (Natural Language Toolkit)**: [https://www.nltk.org/](https://www.nltk.org/)
     - Check for: Stopwords corpus availability and tokenization alternatives.
 - **Concurrent Futures (Python StdLib)**: [https://docs.python.org/3/library/concurrent.futures.html](https://docs.python.org/3/library/concurrent.futures.html)
     - Check for: ThreadPoolExecutor vs ProcessPoolExecutor usage.
-- **TorProxy**: [https://github.com/dperson/torproxy](https://github.com/dperson/torproxy)
-    - Check for: Containerized Tor proxy setup for rotating IPs.
 
 ## Python Packaging
 - **SetupTools / PyProject**: [https://setuptools.pypa.io/en/latest/userguide/quickstart.html](https://setuptools.pypa.io/en/latest/userguide/quickstart.html)
