@@ -1,3 +1,9 @@
+---
+name: architecture
+description:
+  Use this skill to understand the project's modular architecture, component responsibilities, and protocols for extending functionality.
+---
+
 # Architecture Skill
 
 This guide explains the technical structure of WhoSaid.APP and how to extend its functionality.

@@ -1,3 +1,9 @@
+---
+name: business-logic
+description:
+  Use this skill to consult business rules, data processing logic for N-grams (Union/Intersection), and the resulting file structure.
+---
+
 # Business Logic Skill
 
 This document details the functionality, business rules, and data structure of the YouTube phrase (n-gram) extraction and analysis tool.

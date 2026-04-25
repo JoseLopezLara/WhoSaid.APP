@@ -1,3 +1,9 @@
+---
+name: documentation
+description:
+  Use this skill to access official documentation for core libraries (YouTube API, NLTK) and Python coding standards used in the project.
+---
+
 # Documentation Skill
 
 Consult these sources before implementing new library-specific logic or troubleshooting library errors.
@@ -9,6 +15,8 @@ Consult these sources before implementing new library-specific logic or troubles
     - Check for: Stopwords corpus availability and tokenization alternatives.
 - **Concurrent Futures (Python StdLib)**: [https://docs.python.org/3/library/concurrent.futures.html](https://docs.python.org/3/library/concurrent.futures.html)
     - Check for: ThreadPoolExecutor vs ProcessPoolExecutor usage.
+- **TorProxy**: [https://github.com/dperson/torproxy](https://github.com/dperson/torproxy)
+    - Check for: Containerized Tor proxy setup for rotating IPs.
 
 ## Python Packaging
 - **SetupTools / PyProject**: [https://setuptools.pypa.io/en/latest/userguide/quickstart.html](https://setuptools.pypa.io/en/latest/userguide/quickstart.html)

@@ -1,3 +1,9 @@
+---
+name: user-stories
+description:
+  Use this skill to review functional requirements, user stories, and acceptance criteria for current and future features.
+---
+
 # User Stories Skill
 
 This document defines the functional scope of WhoSaid.APP from the user's perspective.
