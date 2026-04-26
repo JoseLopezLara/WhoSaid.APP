@@ -8,25 +8,31 @@ description:
 
 This guide explains the technical structure of WhoSaid.APP and how to extend its functionality.
 
-## Modular OOP Design
-The system is divided into independent modules within `src/whosaid/`.
+## Framework-Style Architecture
+The system is organized into a modular framework structure within `src/whosaid/`.
 
 ### Component Map
-- **TranscriptDownloader (`downloader.py`)**: Orchestrates the download process with retries and delays.
-- **Download Config (`config.py`)**: Centralizes `yt-dlp` options, User-Agents, and client spoofing settings.
-- **YouTube Parser (`parsers.py`)**: Responsible for post-processing; selecting subtitle URLs and parsing JSON3 format.
-- **TextProcessor (`processor.py`)**: Responsible ONLY for text cleaning and multi-block tokenization for analysis.
-- **NgramAnalyzer (`analyzer.py`)**: Orchestrates the processor to generate statistical insights.
-- **StorageManager (`storage.py`)**: Handles the file system hierarchy and JSON persistence.
+- **`config/`**: Centralized configurations following the "one file per library/module" rule.
+    - `base.py`: System logic, secrets, and environment management.
+    - `yt_dlp.py`: Library-specific configurations for `yt-dlp`.
+    - `analysis.py`: Business parameters for N-grams (thresholds, sizes).
+- **`common/`**: Shared business logic.
+    - `storage.py`: File system hierarchy management and JSON persistence.
+- **`utils/`**: Pure utility functions.
+    - `helpers.py`: Supporting functions (e.g., extracting YouTube IDs).
+- **`stages/`**: Primary pipeline stages.
+    - **Stage 1 (Download)**: `stages/stage1_download/engine.py` (Orchestrator), `parsers.py`, `proxies.py`.
+    - **Stage 2 (Analysis)**: `stages/stage2_analysis/engine.py` (Analyzer), `processor.py`.
 
 ## Extension Protocol: Adding New Features
 To add a new functionality (e.g., Sentiment Analysis), follow these steps:
 
-1. **Create the Logic**: Add a new module in `src/whosaid/sentiment.py`.
-2. **Expose the Class**: Add the new class to `src/whosaid/__init__.py`.
-3. **Integration**: If it's a processing step, integrate it into `NgramAnalyzer` or create a new orchestrator.
-4. **Update Notebook**: Reference the new class in `youtube_ngrams_analysis.ipynb`.
-5. **Update Agents**: Register the new module in this guide and create a user story in `user_stories.md`.
+1. **Classify the logic**: 
+    - Is it a new stage? Create `src/whosaid/stages/stage3_sentiment/`.
+    - Is it a shared utility? Add to `src/whosaid/utils/` or `src/whosaid/common/`.
+2. **Expose the Class**: Add the new class to `src/whosaid/__init__.py` for easy access via the facade.
+3. **Integration**: Update orchestrators or create a new execution script.
+4. **Update Agents**: Register the new module in this guide.
 
 ## Interaction Pattern
 Modules should never have circular dependencies. `Analyzer` can depend on `Processor`, but `Processor` must remain pure and independent.

@@ -1,11 +1,11 @@
-from .downloader import TranscriptDownloader
-from .processor import TextProcessor
-from .analyzer import NgramAnalyzer
-from .storage import StorageManager
+from .stages.stage1_download.engine import TranscriptDownloader
+from .stages.stage2_analysis.engine import NgramAnalyzer
+from .stages.stage2_analysis.processor import TextProcessor
+from .common.storage import StorageManager
 
 __all__ = [
     'TranscriptDownloader',
-    'TextProcessor',
     'NgramAnalyzer',
+    'TextProcessor',
     'StorageManager'
 ]

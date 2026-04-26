@@ -1,12 +1,13 @@
 import os
 import json
 import concurrent.futures
+from whosaid.config.analysis import INTERSECTION_THRESHOLD, MIN_GRAM_SIZE, MAX_GRAM_SIZE
 from .processor import TextProcessor
 
 class NgramAnalyzer:
     """Clase encargada de analizar n-gramas y generar métricas de Unión/Intersección."""
     
-    def __init__(self, intersection_threshold=0.6, processor=None):
+    def __init__(self, intersection_threshold=INTERSECTION_THRESHOLD, processor=None):
         self.intersection_threshold = intersection_threshold
         self.processor = processor or TextProcessor()
 
@@ -21,7 +22,7 @@ class NgramAnalyzer:
         if total_videos == 0:
             return None, None
 
-        creator_results = {i: {} for i in range(2, 7)}
+        creator_results = {i: {} for i in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1)}
 
         for file_name in json_files:
             file_path = os.path.join(creator_folder, file_name)
@@ -36,7 +37,7 @@ class NgramAnalyzer:
                 tokens = self.processor.tokenize_transcript(transcript)
                 total_tokens = len(tokens)
 
-                for n in range(2, 7):
+                for n in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1):
                     for i in range(total_tokens - n + 1):
                         ngram_tokens = tokens[i:i+n]
                         ngram_words = tuple(t['word'] for t in ngram_tokens)
@@ -67,10 +68,10 @@ class NgramAnalyzer:
 
         # Separar en Union e Interseccion
         min_videos_required = total_videos * self.intersection_threshold
-        union_results = {i: [] for i in range(2, 7)}
-        intersection_results = {i: [] for i in range(2, 7)}
+        union_results = {i: [] for i in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1)}
+        intersection_results = {i: [] for i in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1)}
 
-        for n in range(2, 7):
+        for n in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1):
             all_ngrams = []
             intersect_ngrams = []
             
@@ -93,7 +94,7 @@ class NgramAnalyzer:
     def format_results(self, creator_results, mode):
         """Formatea los resultados para 'first_appearance' o 'all_appearances'."""
         formatted = {}
-        for n in range(2, 7):
+        for n in range(MIN_GRAM_SIZE, MAX_GRAM_SIZE + 1):
             formatted[f"{n}_grams"] = []
             for phrase, info in creator_results.get(n, []):
                 count = info['count']

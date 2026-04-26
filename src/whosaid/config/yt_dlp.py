@@ -1,4 +1,4 @@
-# Configuration for yt-dlp and evasion headers
+# Configuration specific to the yt-dlp library
 
 YDL_OPTS_BASE = {
     'skip_download': True,
@@ -23,6 +23,7 @@ YDL_OPTS_BASE = {
 }
 
 def get_ydl_opts(languages):
+    """Returns a copy of YDL_OPTS_BASE with specific languages."""
     opts = YDL_OPTS_BASE.copy()
     opts['subtitleslangs'] = languages
     return opts

@@ -1,4 +1,3 @@
-import re
 import os
 import json
 import time
@@ -7,7 +6,8 @@ import concurrent.futures
 import yt_dlp
 import requests
 
-from .config import get_ydl_opts
+from whosaid.config.yt_dlp import get_ydl_opts
+from whosaid.utils.helpers import extract_video_id
 from .parsers import YouTubeTranscriptParser
 
 class TranscriptDownloader:
@@ -19,12 +19,6 @@ class TranscriptDownloader:
         self.parser = YouTubeTranscriptParser()
         # Extract headers from config for consistent requests
         self.headers = self.ydl_opts.get('http_headers', {})
-
-    @staticmethod
-    def extract_video_id(url: str) -> str:
-        """Extracts the YouTube video ID from a URL."""
-        match = re.search(r'(?:v=|\/)([0-9A-Za-z_-]{11}).*', url)
-        return match.group(1) if match else None
 
     def _fetch_content(self, subtitle_url: str) -> list:
         """Helper to fetch and parse transcript content."""
@@ -38,7 +32,7 @@ class TranscriptDownloader:
 
     def download_video_transcript(self, url: str, creator: str, output_base_dir: str):
         """Downloads a video transcript with retry pattern and human-like behavior."""
-        video_id = self.extract_video_id(url)
+        video_id = extract_video_id(url)
         if not video_id:
             return {"status": "error", "message": f"Could not extract ID from URL: {url}"}
 

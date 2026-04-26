@@ -3,9 +3,9 @@
 This document serves as the master guide for AI agents (Gemini CLI, Jules) interacting with this repository. You MUST consult this agent at the start of every session to align with project standards.
 
 ## Core Engineering Principles
-- **Language**: All code (variables, functions, classes, comments), logs, and documentation MUST be in English. Even if the user prompt is in another language, the output in the codebase must be English.
+- **Language**: ALL code (variables, functions, classes), comments, logs, and documentation MUST be in English. No exceptions.
 - **Single Responsibility (SRP)**: Every function or class must perform one, and only one, action.
-- **Modular Architecture**: Favor composition over inheritance. Always separate logic (src/) from orchestration (Notebooks).
+- **Modular Architecture**: Framework-style design. Separate core logic from stage-specific implementations.
 - **Evasion & Integrity**: When fetching external data (YouTube), use modular configurations and human-like behavior (random sleeps, client spoofing) to ensure service continuity.
 - **Type Safety**: Use Python type hints (`from typing import ...`) for all new functions.
 

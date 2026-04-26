@@ -6,12 +6,12 @@ from typing import Dict, List, Any
 sys.path.append(os.path.abspath("src"))
 
 from whosaid import TranscriptDownloader, NgramAnalyzer, StorageManager
+from whosaid.config.analysis import INTERSECTION_THRESHOLD, DEFAULT_N_PHRASES
+from whosaid.config.base import DEBUG, ENVIRONMENT
 
 # ==============================================================================
-# CONFIGURATION
+# RUNTIME CONFIGURATION
 # ==============================================================================
-INTERSECTION_THRESHOLD: float = 0.6
-N_PHRASES: int = 10
 NUM_THREADS: int = 1
 OUTPUT_DIR: str = "processed_files"
 
@@ -19,35 +19,38 @@ OUTPUT_DIR: str = "processed_files"
 TEST_DICTIONARY: Dict[str, str] = {
     "https://www.youtube.com/watch?v=mJcJ0ikucOY": "XOCAS",
     "https://www.youtube.com/watch?v=aMcTiuqqJas": "GUSGRI",
-    "https://www.youtube.com/watch?v=kewy2RUYb3c": "XOCAS",
-    "https://www.youtube.com/watch?v=n9RhsFlKeSI": "XOCAS",
-    "https://www.youtube.com/watch?v=S8q9eHBnHxE": "XOCAS",
-    "https://www.youtube.com/watch?v=dnWT6lV8Zms": "GUSGRI",
-    "https://www.youtube.com/watch?v=yUAbe5isKTg": "GUSGRI",
-    "https://www.youtube.com/watch?v=5rF-0wK4fpI": "GUSGRI",
-    "https://www.youtube.com/watch?v=R2BYWHmhBuk": "GUSGRI",
-    "https://www.youtube.com/watch?v=8V6b5hCx5F8": "XOCAS",
-    "https://www.youtube.com/watch?v=tf4LAo_JY68": "XOCAS",
-    "https://www.youtube.com/watch?v=Bfy1yDB_YXM": "XOCAS",
-    "https://www.youtube.com/watch?v=JaqdFMzWmqU": "XOCAS",
-    "https://www.youtube.com/watch?v=tUsXRMXlHl0": "GUSGRI",
-    "https://www.youtube.com/watch?v=PYPsdJmcgjo": "GUSGRI",
-    "https://www.youtube.com/watch?v=i49LvJMtwbM": "GUSGRI",
-    "https://www.youtube.com/watch?v=p5jo4kS2P8Q": "GUSGRI",
-    "https://www.youtube.com/watch?v=fQxVMOSB_L8": "GUSGRI",
-    "https://www.youtube.com/watch?v=SOnBk94vOzk": "GUSGRI",
-    "https://www.youtube.com/watch?v=-ibeiAm_VEY": "GUSGRI"
+    #"https://www.youtube.com/watch?v=kewy2RUYb3c": "XOCAS",
+    #"https://www.youtube.com/watch?v=n9RhsFlKeSI": "XOCAS",
+    #"https://www.youtube.com/watch?v=S8q9eHBnHxE": "XOCAS",
+    #"https://www.youtube.com/watch?v=dnWT6lV8Zms": "GUSGRI",
+    #"https://www.youtube.com/watch?v=yUAbe5isKTg": "GUSGRI",
+    #"https://www.youtube.com/watch?v=5rF-0wK4fpI": "GUSGRI",
+    #"https://www.youtube.com/watch?v=R2BYWHmhBuk": "GUSGRI",
+    #"https://www.youtube.com/watch?v=8V6b5hCx5F8": "XOCAS",
+    #"https://www.youtube.com/watch?v=tf4LAo_JY68": "XOCAS",
+    #"https://www.youtube.com/watch?v=Bfy1yDB_YXM": "XOCAS",
+    #"https://www.youtube.com/watch?v=JaqdFMzWmqU": "XOCAS",
+    #"https://www.youtube.com/watch?v=tUsXRMXlHl0": "GUSGRI",
+    #"https://www.youtube.com/watch?v=PYPsdJmcgjo": "GUSGRI",
+    #"https://www.youtube.com/watch?v=i49LvJMtwbM": "GUSGRI",
+    #"https://www.youtube.com/watch?v=p5jo4kS2P8Q": "GUSGRI",
+    #"https://www.youtube.com/watch?v=fQxVMOSB_L8": "GUSGRI",
+    #"https://www.youtube.com/watch?v=SOnBk94vOzk": "GUSGRI",
+    #"https://www.youtube.com/watch?v=-ibeiAm_VEY": "GUSGRI"
 }
 
 def run_orchestration() -> None:
     """
     Main orchestration flow for downloading transcripts and analyzing n-grams.
     """
-    print(f"--- Starting WhoSaid.APP Orchestration ---")
+    print(f"--- Starting WhoSaid.APP Orchestration ({ENVIRONMENT}) ---")
+    if DEBUG:
+        print("[DEBUG MODE ENABLED]")
     
     # 1. Initialize Managers
     storage = StorageManager(base_dir=OUTPUT_DIR)
     downloader = TranscriptDownloader(languages=['es', 'en'])
+    # Se inicializa con los defaults del archivo de config
     analyzer = NgramAnalyzer(intersection_threshold=INTERSECTION_THRESHOLD)
 
     # 2. Setup Directories
@@ -64,7 +67,7 @@ def run_orchestration() -> None:
     results: Dict[str, Any] = analyzer.run_batch_analysis(
         creators, 
         input_base_dir=OUTPUT_DIR, 
-        n_phrases=N_PHRASES, 
+        n_phrases=DEFAULT_N_PHRASES, 
         num_threads=NUM_THREADS
     )
 
