@@ -209,3 +209,4 @@ __marimo__/
 #backups
 /backups
 /processed_files
+/test_output

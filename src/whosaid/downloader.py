@@ -77,13 +77,13 @@ class TranscriptDownloader:
                     with open(output_file, 'w', encoding='utf-8') as f:
                         json.dump(data, f, ensure_ascii=False, indent=2)
 
-                    time.sleep(random.uniform(3, 7))
+                    time.sleep(random.uniform(90, 120))
                     return {"status": "success", "video_id": video_id, "creator": creator, "path": output_file}
 
             except Exception as e:
                 attempt += 1
                 if attempt <= max_retries:
-                    time.sleep(random.uniform(10, 20))
+                    time.sleep(random.uniform(90, 120))
                 else:
                     return {"status": "error", "message": f"Max retries reached: {type(e).__name__}"}
 
